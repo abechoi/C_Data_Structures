@@ -5,13 +5,11 @@
 	RACING CARS:
 	1. Use a linked list of racing cars
 	2. Create functions to add cars, print list of added cars, and quit
-
-	NEXT OBJECTIVE:
-	1. Have user populate the linked list via command line
-	2. Delete the hardcoded racing cars
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct S_RacingCar{
 
@@ -21,16 +19,20 @@ typedef struct S_RacingCar{
 
 } RacingCar;
 
-void PrintList(RacingCar *start){
 
-	RacingCar *currentCar = start;
+void PrintList(RacingCar *start){
+// PrintList function starts by point at the head, printing it,
+// then traversing the list to print the rest...
+
+	RacingCar *currentCar = start; // start argument is the current
 	int count = 0;
+	printf("\nCAR LIST:\n--------\n");
 
 	while( currentCar != NULL ){
 		
 		++count;
 
-		printf("Car: %d\nName: %s\nSpeed: %d\n", 
+		printf("Car: %d\nName: %s\nSpeed: %d\n--------\n", 
 			count, currentCar->name, currentCar->speed );
 		currentCar = currentCar->next;
 	}
@@ -38,20 +40,94 @@ void PrintList(RacingCar *start){
 
 }
 
+RacingCar *addCar(RacingCar *previous){
+
+
+	printf( "--------\n%s", "Enter name and speed: " );
+	char input[16];
+	fgets( input, 15, stdin );
+
+	RacingCar *newCar = malloc( sizeof(RacingCar) );
+	sscanf( input, "%s %d", newCar->name, &newCar->speed );
+	printf("Added: %s\nSpeed: %d\n--------\n", newCar->name, newCar->speed );
+
+
+	if( previous != NULL ){
+		previous->next = newCar;
+	}
+
+	return newCar;
+}
+
+void cleanUp(RacingCar *start){
+
+	RacingCar *freeMe = start;
+	RacingCar *holdMe = NULL;
+
+	while( freeMe != NULL ){
+		holdMe = freeMe->next;
+		//printf("Added: %s\nSpeed:%d \n", freeMe->name, freeMe->speed);
+
+		printf("%s%s%s%d%s\n",
+			"Freeing  ", freeMe->name, " @ ", freeMe->speed, " MPH...");
+		free(freeMe);
+		freeMe = holdMe;
+	}
+}
+
 int main(){
 
-	RacingCar RedBull = { "RedBull", 100, NULL };
-	RacingCar Ferrari = {"Ferrari", 90, NULL};
-	RacingCar Mercedes = {"Mercedes", 80, NULL};
-	RacingCar Lotus = {"Lotus", 70, NULL};
-	RacingCar McLaren = {"McLaren", 60, NULL};
+	char command[16];
+	char input[16];
 
-	RedBull.next = &Ferrari;
-	Ferrari.next = &Mercedes;
-	Mercedes.next = &Lotus;
-	Lotus.next = &McLaren;
+	RacingCar *start = NULL;	// head
+	RacingCar *newest = NULL;	// next
 
-	PrintList(&RedBull);
+	// WHILELOOP1 - Input commands: quit, print, and add.
+	while( fgets( input, 15, stdin) ){ // stdin gives input the command
 
+		sscanf( input, "%s", command ); // command takes input as a string
+
+		// QUIT COMMAND
+		if( strncmp( command, "quit", 4 ) == 0 ){
+			printf("\n\nQuitting...\n\n");
+			break;
+		}
+		// PRINT COMMAND
+		else if( strncmp( command, "print", 5 ) == 0 ){
+			PrintList(start);
+		}
+		// ADD COMMAND
+		else if( strncmp( command, "add", 3) == 0 ){
+			
+			if( start == NULL ){
+
+				start = addCar(NULL); // NULL, head does not have a previous
+				newest = start; // head node becomes the start car
+
+			}
+			else{
+
+				newest = addCar(newest);
+			}
+		}
+
+	} // END WHILELOOP1
+
+	cleanUp(start);
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

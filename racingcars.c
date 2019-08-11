@@ -1,3 +1,11 @@
+/*
+	Youtube: Bluefever Software
+	Beginning C Programming - Part 45 - Data Structures & Linked Lists #1 and #2
+
+	RACING CARS:
+	1. Use an array of racing cars
+	2. Create functions to add cars, print list of added cars, and quit
+*/
 #include <stdio.h>
 #include <string.h>
 
@@ -9,7 +17,8 @@ typedef struct S_RacingCar{
 } RacingCar; // typedef alias
 
 // Print list of cars added by user
-void printList(RacingCar carArray[], int num){
+void printList( RacingCar carArray[], int num ){
+
 	printf("\nCAR LIST:\n--------\n");
 	int carIndex = 0;
 	RacingCar *car;
@@ -29,7 +38,7 @@ void printList(RacingCar carArray[], int num){
 // RacingCar *car is the memory address of 
 int addCar(RacingCar *car){
 	
-	printf( "%p\n", car );
+	// printf( "%p\n", car ); // gets memory address of car
 	printf( "%s", "Enter name and speed: " );
 	char input[16];
 	fgets( input, 15, stdin );
@@ -63,7 +72,7 @@ int main(){
 	char command[16];
 	char input[16];
 
-	// Prompt user for string command: print, add, or quit
+	// WHILELOOP1 - Prompt user for string command: print, add, or quit
 	while( fgets( input, 15, stdin )){
 
 		// Command variable takes input variable as a string
@@ -85,18 +94,18 @@ int main(){
 
 				// addCar() returns 1 if car is added...
 				// then int numCars is increased by 1
-				printf("%p\n", &allCars[numCars]);
+				//printf("%p\n", &allCars[numCars]); // gets memory address of car
 				numCars += addCar( &allCars[numCars]);
 			}
 			else{
 				printf("Sorry, list is full!\n");
 			}
 		}
-	}
+	} // END WHILELOOP1
 
 	
 	return 0;
-}
+} // END MAIN
 
 
 

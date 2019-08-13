@@ -4,9 +4,12 @@
 	1. Added *prev into RacingCar struct
 	2. Added rmCar function to remove the tail node
 	3. Improved CLI
+	4. Added index variable for car struct
+	5. Added car counting capability
 
 	UPCOMING FEATURES:
 	1. Add index into RacingCar struct
+	2. Add function to delete the head node
 	2. Add function to remove node by searching index
 	3. Implement doubly linked list
 */
@@ -41,8 +44,9 @@ void printList( RacingCar *start ){
 
 		//printf("Car: %d\nName: %s\nSpeed: %d\n--------\n", 
 		//	count, currentCar->name, currentCar->speed );
-		printf("%s\n%s%s\n%s%d\n%s\n",
+		printf("%s\n%s%d\n%s%s\n%s%d\n%s\n",
 			"-----------",
+			"Index: ", currentCar->index,
 			"Name: ", currentCar->name,
 			"Speed: ", currentCar->speed,
 			"-----------");
@@ -59,7 +63,7 @@ void printList( RacingCar *start ){
 }
 
 // ADD CAR
-RacingCar *addCar( RacingCar *previous ){
+RacingCar *addCar( RacingCar *previous, int count ){
 
 	char input[16];
 	RacingCar *newCar = malloc( sizeof(RacingCar) );
@@ -70,11 +74,13 @@ RacingCar *addCar( RacingCar *previous ){
 	fgets( input, 15, stdin );
 	sscanf( input, "%s %d", newCar->name, &newCar->speed );
 
+	newCar->index = count;
 
-	printf("\n%s\n%s\n%s\n%s%s\n%s%d\n%s\n",
+	printf("\n%s\n%s\n%s\n%s%d\n%s%s\n%s%d\n%s\n",
 		"--------",
 		"Adding...",
 		"--------",
+		"Index: ", newCar->index,
 		"Name: ", newCar->name,
 		"Speed: ", newCar->speed,
 		"--------");
@@ -148,6 +154,8 @@ void printMenu(){
 
 int main(){
 
+
+	int count = 0;
 	char input[16];
 	char command[16];
 	RacingCar *start = NULL;
@@ -171,12 +179,14 @@ int main(){
 		}
 		else if( *command == 'a' ){
 
+			++count;
+
 			if( start == NULL ){
-				start = addCar(NULL);
+				start = addCar( NULL, count );
 				newest = start;
 			}
 			else{
-				newest = addCar(newest);
+				newest = addCar( newest, count );
 			}
 		}
 		printMenu();
